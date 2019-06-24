@@ -142,24 +142,32 @@ public class SLinkedList<T> {
         size--;
         return temp.getValor();
     }
-    public void add(int index, T value) {
+       public void add(int index, T value) {
         if(index > size || index < 0) throw new IndexOutOfBoundsException("index "+index);
         Nodo<T> temp = head;
-        Nodo<T> before = null;
         for(int i = 0; i < index; i++) {
-            before = temp;
             temp = temp.getProximo();
         }
         Nodo<T> newNode = new Nodo<T>();
         newNode.setValor(value);
         newNode.setProximo(temp);
-        newNode.setAnterior(before);
-        if(before == null) {
+        if(head == null) {
             head = newNode;
+            head.setAnterior(null);
         }else {
-            before.setProximo(newNode);
-            if(temp == tail) {
-                tail = newNode;
+            if(index == size()){
+                addLast(value);
+                size --;
+            }
+            else {
+                Nodo<T> before = temp.getAnterior();
+                newNode.setAnterior(temp.getAnterior());
+                before.setProximo(newNode);
+                temp.setAnterior(newNode);
+                if (temp == tail) {
+                    tail = temp;
+                    tail.setProximo(null);
+                }
             }
         }
         size++;
